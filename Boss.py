@@ -1,0 +1,111 @@
+import pygame, sys
+from pygame.locals import *
+from Enemy import skull
+from Projectile import *
+
+Boss = pygame.image.load("Img\Boss.png")
+Boss_getHit = pygame.image.load("Img\Boss_getHit.png")
+Boss_shadow = pygame.image.load("Img\Boss_shadow.png")
+Boss_side = pygame.image.load("Img\Boss_side.png")
+Boss_s1Ac = pygame.image.load("Img\Boss_s1Ac.png")
+Boss = pygame.transform.scale(Boss, (250, 250))
+Boss_getHit = pygame.transform.scale(Boss_getHit, (250, 250))
+Boss_shadow = pygame.transform.scale(Boss_shadow, (230, 250/6))
+Boss_side = pygame.transform.scale(Boss_side, (250, 250))
+Boss_s1Ac = pygame.transform.scale(Boss_s1Ac, (250, 250))
+
+class boss(object):
+    def __init__(self, x, y, target):
+        self.x = x
+        self.y = y
+        self.sha_x = x
+        self.sha_y = y + 250
+        self.width = 250
+        self.height = 250
+        self.HP = 100
+        self.hitBox = pygame.Rect(x + 10, y, 230, 250)
+        self.GetHit = 0
+        self.floatCount = 0
+        self.Attacks = []
+        self.Cooldown = 0
+        self.Acskill = False
+        self.facing = -1
+        self.target = target
+        
+        #Skill 1
+        self.s1_Ac = 0
+        self.s1_Sp = 0
+        self.s1_Cd = 0
+
+    def draw(self,screen):
+        if self.Cooldown > 0: self.Cooldown -= 1
+        if self.s1_Cd > 0: self.s1_Cd -= 1
+        
+        pygame.draw.rect(screen, (10,10,10), (1480, 200, 50, 100*5 + 4))
+        pygame.draw.rect(screen, (200,200,200), (1480 + 2, 200 + 2 + (100 -self.HP)*5, 50 - 4, self.HP*5))
+        
+        if not(self.Acskill):
+            if self.floatCount  >= -1:
+                    self.y -= (self.floatCount  * abs(self.floatCount )) * 0.5
+                    self.floatCount  -= 0.1
+            else: 
+                self.floatCount  = 1
+            
+            if self.GetHit > 0: 
+                screen.blit(Boss_getHit, (self.x, self.y))
+                self.GetHit -= 1
+            else: screen.blit(Boss, (self.x, self.y))
+            
+            
+            for At in self.Attacks:
+                At.draw(screen)
+        else:
+            #Skill 1
+            if(self.s1_Ac > 0):
+                if self.s1_Ac > 30:
+                    if self.y + 250 != self.target.y + 92:
+                        if self.y + 250 > self.target.y + 92: self.y -= self.s1_Sp
+                        else: self.y += self.s1_Sp
+                    screen.blit(Boss, (self.x, self.y))
+                elif self.s1_Ac > 25:
+                    screen.blit(Boss_s1Ac, (self.x, self.y)) 
+                else:
+                    self.x += 30*self.facing
+                    if self.facing == -1: screen.blit(Boss_side, (self.x, self.y))
+                    else:  screen.blit(pygame.transform.flip(Boss_side, True, False), (self.x, self.y))
+                self.s1_Ac -= 1
+            else: self.Acskill = False
+            self.sha_x = self.x
+            self.sha_y = self.y + 250
+        
+        ScreenLimit(self)
+        screen.blit(Boss_shadow, (self.sha_x, self.sha_y))
+        self.hitBox = pygame.Rect(self.x + 10, self.y, 230, 250)
+        pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
+            
+    def getHit(self, dame):
+        self.HP -= dame
+        self.GetHit = 2
+    
+    def hit(self):
+        if self.hitBox.colliderect(self.target.hitBox): return True
+        return False
+    
+    def Attack(self, Player):
+        for Bolt in self.Attacks:
+            if not(Bolt.x < 1500 and Bolt.x > 0 and Bolt.y > 150 and Bolt.y < 800):
+                self.Attacks.pop(self.Attacks.index(Bolt))
+                
+        if self.Cooldown == 0:
+            #self.skill1()
+            self.Attacks.append(skull(self.x, self.y, 64, 64,Player))
+            self.Cooldown = 150
+    
+    def skill1(self):
+        if self.x - self.target.x > 0: self.facing = -1
+        else: self.facing = 1
+        self.s1_Sp = abs(self.target.y + 92 - self.y - 250)/10
+        self.s1_Ac = 40
+        self.Acskill = True
+        self.s1_Cd = 10
+        
