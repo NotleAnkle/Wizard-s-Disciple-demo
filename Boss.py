@@ -3,6 +3,9 @@ from pygame.locals import *
 from Enemy import skull
 from Projectile import *
 
+pygame.init()
+pygame.mixer.init()
+
 Boss = pygame.image.load("Img\Boss.png")
 Boss_getHit = pygame.image.load("Img\Boss_getHit.png")
 Boss_shadow = pygame.image.load("Img\Boss_shadow.png")
@@ -14,6 +17,8 @@ Boss_shadow = pygame.transform.scale(Boss_shadow, (230, 250/6))
 Boss_side = pygame.transform.scale(Boss_side, (250, 250))
 Boss_s1Ac = pygame.transform.scale(Boss_s1Ac, (250, 250))
 
+Skill1Sound = pygame.mixer.Sound("Sound\Boss_Skill1.wav")
+Skill1Sound.set_volume(0.5)
 class boss(object):
     def __init__(self, x, y, target):
         self.x = x
@@ -70,6 +75,7 @@ class boss(object):
                 elif self.s1_Ac > 25:
                     screen.blit(Boss_s1Ac, (self.x, self.y)) 
                 else:
+                    #Skill1Sound.play()
                     self.x += 30*self.facing
                     if self.facing == -1: screen.blit(Boss_side, (self.x, self.y))
                     else:  screen.blit(pygame.transform.flip(Boss_side, True, False), (self.x, self.y))
@@ -102,6 +108,7 @@ class boss(object):
             self.Cooldown = 150
     
     def skill1(self):
+        Skill1Sound.play()
         if self.x - self.target.x > 0: self.facing = -1
         else: self.facing = 1
         self.s1_Sp = abs(self.target.y + 92 - self.y - 250)/10

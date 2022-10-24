@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from Projectile import *
+pygame.mixer.init()
 
 clone = pygame.image.load("Img\Clone.png")
 idle = [pygame.image.load("Img\Idle_1.png"),pygame.image.load("Img\Idle_2.png"),pygame.image.load("Img\Idle_1.png"),pygame.image.load("Img\Idle_4.png")]
@@ -12,6 +13,11 @@ ChaImg = pygame.image.load('Img\Idle_1.png')
 AttackAnimation = [pygame.image.load("Img\AttackLeft.png"),pygame.image.load("Img\AttackRight.png"),pygame.image.load("Img\AttackUp.png"),pygame.image.load("Img\AttackDown.png")]
 Player_getHit = pygame.image.load("Img\Player_getHit.png")
 ShieldImg = pygame.image.load("Img\shield.png")
+
+Sound_At = pygame.mixer.Sound("Sound\main_attack.wav")
+Sound_Move = pygame.mixer.Sound("Sound\main_move_glass.wav")
+Sound_Move.set_volume(0.3)
+Sound_At.set_volume(0.1)
 
 x = 0
 y = 400
@@ -134,19 +140,23 @@ class player(object):
                 if not(self.walk):
                     screen.blit(idle[self.idleCount//12], (self.x,self.y)) 
                     self.idleCount += 1
-                elif self.direction == "down":
-                    screen.blit(walkDown[self.walkYCount//10], (self.x,self.y))
-                    self.walkYCount += 1
-                elif self.direction == "up":
-                    screen.blit(walkUp[self.walkYCount//10], (self.x,self.y))
-                    self.walkYCount += 1
-                elif self.direction == "right":
-                    screen.blit(walkRight[self.walkXCount//5], (self.x,self.y))
-                    self.walkXCount += 1
-                elif self.direction == "left":
-                    screen.blit(walkLeft[self.walkXCount//5], (self.x,self.y))
-                    self.walkXCount += 1
+                else:
+                    if self.direction == "down":
+                        screen.blit(walkDown[self.walkYCount//10], (self.x,self.y))
+                        self.walkYCount += 1
+                    elif self.direction == "up":
+                        screen.blit(walkUp[self.walkYCount//10], (self.x,self.y))
+                        self.walkYCount += 1
+                    elif self.direction == "right":
+                        screen.blit(walkRight[self.walkXCount//5], (self.x,self.y))
+                        self.walkXCount += 1
+                    elif self.direction == "left":
+                        screen.blit(walkLeft[self.walkXCount//5], (self.x,self.y))
+                        self.walkXCount += 1
+                    Sound_Move.play()
             else:
+                Sound_At.play()
+                pygame.mixer.init()
                 if self.direction == "left":
                     screen.blit(AttackAnimation[0], (self.x,self.y))
                 if self.direction == "right":
@@ -156,6 +166,7 @@ class player(object):
                 if self.direction == "down":
                     screen.blit(AttackAnimation[3], (self.x,self.y))
                 self.AtCount += 1
+                
                 if self.AtCount == 4:
                     self.isAt = False
                     self.AtCount = 0

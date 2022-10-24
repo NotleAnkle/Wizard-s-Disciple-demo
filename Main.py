@@ -5,6 +5,9 @@ from Enemy import *
 from Projectile import *
 from Boss import *
 
+pygame.init()
+pygame.mixer.init()
+
 FPS = 30 # frames per second setting
 fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode((1540, 800), 0, 32)
@@ -16,7 +19,8 @@ lose = pygame.image.load("Img\Lose.png")
 lose = pygame.transform.scale(lose, (1540, 800))
 win = pygame.transform.scale(pygame.image.load("Img\Win.png"), (1540, 800))
 
-
+music = pygame.mixer.music.load("Sound\BG.wav")
+pygame.mixer.music.set_volume(1.1)
 
 x = 0
 y = 400
@@ -25,10 +29,10 @@ height = 92
 Wiz = player(x, y, width, height)
 Boss = boss(1000, 200, Wiz)
 running = True
+pygame.mixer.music.play(-1)
 while running:
-    
+    pygame.init()
     screen.blit(background, (0, 0))
-
     
     if Wiz.HP > 0 and Boss.HP > 0:
         
@@ -56,10 +60,12 @@ while running:
             if Atb.hit():
                 Wiz.getHit(Atb.dame)
                 Boss.Attacks.remove(Atb)
-    elif Wiz.HP == 0:
+    elif Wiz.HP <= 0:
         screen.blit(lose, (0,0))
-    elif Boss.HP == 0:
+    elif Boss.HP <= 0:
         screen.blit(win, (0,0))  
+    
+    pygame.draw.rect(screen, (0,0,0), (0,0,1540,800), 1)
  
     for event in pygame.event.get():
         if event.type == QUIT:
