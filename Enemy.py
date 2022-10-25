@@ -2,9 +2,12 @@ import pygame, sys
 from pygame.locals import *
 from Projectile import *
 
+pygame.mixer.init()
 SkeImg = pygame.image.load("Img\Ske.png")
 SkeImg = pygame.transform.scale(SkeImg, (64, 102))
 SkuImg = pygame.image.load("Img\Skull.png")
+SkuSound = pygame.mixer.Sound("Sound\laugh.wav")
+SkuSound.set_volume(1)
 class skull(object):
     def __init__(self, x, y, width, height, target):
         self.x = x
@@ -16,6 +19,7 @@ class skull(object):
         self.hitBox = pygame.Rect(self.x, self.y, self.width, self.height)
         self.walkCount = 0
         self.dame = 5
+        pygame.mixer.Channel(4).play(SkuSound)
     def draw(self,screen):
        if self.x < self.target.x: self.x += min(self.speed, abs(self.x - self.target.x))
        else: self.x -= min(self.speed, abs(self.x - self.target.x))

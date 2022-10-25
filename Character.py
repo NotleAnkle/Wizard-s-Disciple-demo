@@ -16,8 +16,10 @@ ShieldImg = pygame.image.load("Img\shield.png")
 
 Sound_At = pygame.mixer.Sound("Sound\main_attack.wav")
 Sound_Move = pygame.mixer.Sound("Sound\main_move_glass.wav")
+Sound_Hurt = pygame.mixer.Sound("Sound\main_hurt.wav")
 Sound_Move.set_volume(0.3)
-Sound_At.set_volume(0.1)
+Sound_At.set_volume(0.2)
+Sound_Hurt.set_volume(0.2)
 
 x = 0
 y = 400
@@ -74,7 +76,8 @@ class player(object):
                     self.isAt = True
                     self.MP -= 1
                     self.Attacks.append(projectile(round(self.x + self.width //2), round(self.y + self.height//2), 15, (50,50,50), self.direction))
-                    self.Cooldown = 15
+                    self.Cooldown = 10
+                    pygame.mixer.Channel(0).play(Sound_At)
             if keys[pygame.K_LEFT] and self.x > 0:
                 self.walk = True
                 self.direction = "left"
@@ -155,8 +158,7 @@ class player(object):
                         self.walkXCount += 1
                     Sound_Move.play()
             else:
-                Sound_At.play()
-                pygame.mixer.init()
+                
                 if self.direction == "left":
                     screen.blit(AttackAnimation[0], (self.x,self.y))
                 if self.direction == "right":
@@ -226,6 +228,7 @@ class player(object):
         
     def getHit(self, dame):
         if(self.GetHit == 0):
+            pygame.mixer.Channel(3).play(Sound_Hurt)
             self.HP -= dame
             self.GetHit = 40
             

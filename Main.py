@@ -31,7 +31,6 @@ Boss = boss(1000, 200, Wiz)
 running = True
 pygame.mixer.music.play(-1)
 while running:
-    pygame.init()
     screen.blit(background, (0, 0))
     
     if Wiz.HP > 0 and Boss.HP > 0:
@@ -53,7 +52,7 @@ while running:
         
         Boss.Attack(Wiz)
         if Boss.s1_Cd == 0:
-            Boss.skill1()
+            #Boss.skill1()
             Boss.s1_Cd = 150  
         Boss.draw(screen)
         for Atb in Boss.Attacks:

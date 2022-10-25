@@ -19,6 +19,9 @@ Boss_s1Ac = pygame.transform.scale(Boss_s1Ac, (250, 250))
 
 Skill1Sound = pygame.mixer.Sound("Sound\Boss_Skill1.wav")
 Skill1Sound.set_volume(0.5)
+BSound_hurt = pygame.mixer.Sound("Sound\Boss_hurt.wav")
+BSound_hurt.set_volume(0.7)
+
 class boss(object):
     def __init__(self, x, y, target):
         self.x = x
@@ -90,6 +93,7 @@ class boss(object):
         pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
             
     def getHit(self, dame):
+        pygame.mixer.Channel(2).play(BSound_hurt)
         self.HP -= dame
         self.GetHit = 2
     
@@ -105,12 +109,13 @@ class boss(object):
         if self.Cooldown == 0:
             #self.skill1()
             self.Attacks.append(skull(self.x, self.y, 64, 64,Player))
-            self.Cooldown = 150
+            self.Cooldown = 50
     
     def skill1(self):
-        Skill1Sound.play()
+        
         if self.x - self.target.x > 0: self.facing = -1
         else: self.facing = 1
+        pygame.mixer.Channel(1).play(Skill1Sound)
         self.s1_Sp = abs(self.target.y + 92 - self.y - 250)/10
         self.s1_Ac = 40
         self.Acskill = True
