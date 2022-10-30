@@ -156,7 +156,7 @@ class player(object):
                     elif self.direction == "left":
                         screen.blit(walkLeft[self.walkXCount//5], (self.x,self.y))
                         self.walkXCount += 1
-                    Sound_Move.play()
+                    #Sound_Move.play()
             else:
                 
                 if self.direction == "left":
@@ -234,5 +234,5 @@ class player(object):
             
     def dash(self):
         if self.dashCooldown == 0:
-            self.dashCooldown = 26
+            self.dashCooldown = 28
             self.dashDirection = self.direction

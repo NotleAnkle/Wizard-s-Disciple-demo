@@ -30,6 +30,7 @@ Wiz = player(x, y, width, height)
 Boss = boss(1000, 200, Wiz)
 running = True
 pygame.mixer.music.play(-1)
+
 while running:
     screen.blit(background, (0, 0))
     
@@ -44,16 +45,14 @@ while running:
             if At.hit(Boss, 230, 250):
                 Boss.getHit(At.dame)
                 Wiz.Attacks.remove(At)
-            for Atb in Boss.Attacks:
-                if At.hit(Atb, 64, 64):
-                    Boss.Attacks.remove(Atb)
-                    Wiz.Attacks.remove(At)
-                    if Wiz.MP < 100: Wiz.MP += 3
+            else:
+                for Atb in Boss.Attacks:
+                    if At.hit(Atb, 64, 64):
+                        Boss.Attacks.remove(Atb)
+                        Wiz.Attacks.remove(At)
+                        if Wiz.MP < 100: Wiz.MP += 3
         
         Boss.Attack(Wiz)
-        if Boss.s1_Cd == 0:
-            #Boss.skill1()
-            Boss.s1_Cd = 150  
         Boss.draw(screen)
         for Atb in Boss.Attacks:
             if Atb.hit():

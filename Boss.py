@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from Enemy import skull
+from Enemy import ske_hand, skull
 from Projectile import *
 
 pygame.init()
@@ -20,7 +20,7 @@ Boss_s1Ac = pygame.transform.scale(Boss_s1Ac, (250, 250))
 Skill1Sound = pygame.mixer.Sound("Sound\Boss_Skill1.wav")
 Skill1Sound.set_volume(0.5)
 BSound_hurt = pygame.mixer.Sound("Sound\Boss_hurt.wav")
-BSound_hurt.set_volume(0.7)
+BSound_hurt.set_volume(0.6)
 
 class boss(object):
     def __init__(self, x, y, target):
@@ -44,10 +44,13 @@ class boss(object):
         self.s1_Ac = 0
         self.s1_Sp = 0
         self.s1_Cd = 0
+        #Skill 2
+        self.s2_Cd = 0
 
     def draw(self,screen):
         if self.Cooldown > 0: self.Cooldown -= 1
         if self.s1_Cd > 0: self.s1_Cd -= 1
+        if self.s2_Cd > 0: self.s2_Cd -= 1
         
         pygame.draw.rect(screen, (10,10,10), (1480, 200, 50, 100*5 + 4))
         pygame.draw.rect(screen, (200,200,200), (1480 + 2, 200 + 2 + (100 -self.HP)*5, 50 - 4, self.HP*5))
@@ -63,10 +66,6 @@ class boss(object):
                 screen.blit(Boss_getHit, (self.x, self.y))
                 self.GetHit -= 1
             else: screen.blit(Boss, (self.x, self.y))
-            
-            
-            for At in self.Attacks:
-                At.draw(screen)
         else:
             #Skill 1
             if(self.s1_Ac > 0):
@@ -87,6 +86,9 @@ class boss(object):
             self.sha_x = self.x
             self.sha_y = self.y + 250
         
+        for At in self.Attacks:
+                At.draw(screen)
+        
         ScreenLimit(self)
         screen.blit(Boss_shadow, (self.sha_x, self.sha_y))
         self.hitBox = pygame.Rect(self.x + 10, self.y, 230, 250)
@@ -106,10 +108,18 @@ class boss(object):
             if not(Bolt.x < 1500 and Bolt.x > 0 and Bolt.y > 150 and Bolt.y < 800):
                 self.Attacks.pop(self.Attacks.index(Bolt))
                 
+        if self.s1_Cd == 0:
+            self.skill1()
+            self.s1_Cd = 150
+            
+        if self.s2_Cd == 0:
+            self.skill2()
+            self.s2_Cd = 50
+        
         if self.Cooldown == 0:
             #self.skill1()
             self.Attacks.append(skull(self.x, self.y, 64, 64,Player))
-            self.Cooldown = 50
+            self.Cooldown = 100
     
     def skill1(self):
         
@@ -120,4 +130,14 @@ class boss(object):
         self.s1_Ac = 40
         self.Acskill = True
         self.s1_Cd = 10
+        
+    def skill2(self):
+        if self.facing == 1: 
+            self.Attacks.append(ske_hand(0, 200, 1, self.target))
+            self.Attacks.append(ske_hand(100, 450, 1, self.target))
+            self.Attacks.append(ske_hand(200, 700, 1, self.target))
+        else: 
+            self.Attacks.append(ske_hand(1500, 200, -1, self.target))
+            self.Attacks.append(ske_hand(1400, 450, -1, self.target))
+            self.Attacks.append(ske_hand(1300, 700, -1, self.target))
         
