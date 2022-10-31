@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 
+ColiderBoxOn = False
 ShieldImg = pygame.image.load("Img\shield.png")
 def drawBar(screen):
     pygame.draw.rect(screen, (0,0,0), (0, 2, 100 * 2 + 2, 22))
@@ -32,7 +33,7 @@ class projectile(object):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
         pygame.draw.circle(screen, (100, 100, 100), (self.x, self.y), self.radius - 2)
         pygame.draw.circle(screen, (250, 250, 250), (self.x, self.y), self.radius - 3)
-        pygame.draw.circle(screen, (255,0,0), (self.x, self.y), self.radius, 2)
+        if ColiderBoxOn :pygame.draw.circle(screen, (255,0,0), (self.x, self.y), self.radius, 2)
     def hit(self, enemy, width, height):
         if self.x >= enemy.x and self.y >= enemy.y and self.x <= enemy.x + width and self.y <= enemy.y + height : return True
         return False

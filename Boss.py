@@ -1,6 +1,7 @@
+import random
 import pygame, sys
 from pygame.locals import *
-from Enemy import ske_hand, skull
+from Enemy import *
 from Projectile import *
 
 pygame.init()
@@ -48,14 +49,17 @@ class boss(object):
         self.s2_Cd = 0
 
     def draw(self,screen):
+        #Cooldown
         if self.Cooldown > 0: self.Cooldown -= 1
         if self.s1_Cd > 0: self.s1_Cd -= 1
         if self.s2_Cd > 0: self.s2_Cd -= 1
         
+        #HP
         pygame.draw.rect(screen, (10,10,10), (1480, 200, 50, 100*5 + 4))
         pygame.draw.rect(screen, (200,200,200), (1480 + 2, 200 + 2 + (100 -self.HP)*5, 50 - 4, self.HP*5))
         
         if not(self.Acskill):
+            #Idle
             if self.floatCount  >= -1:
                     self.y -= (self.floatCount  * abs(self.floatCount )) * 0.5
                     self.floatCount  -= 0.1
@@ -91,8 +95,9 @@ class boss(object):
         
         ScreenLimit(self)
         screen.blit(Boss_shadow, (self.sha_x, self.sha_y))
+        #ColiderBox
         self.hitBox = pygame.Rect(self.x + 10, self.y, 230, 250)
-        pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
+        if ColiderBoxOn : pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
             
     def getHit(self, dame):
         pygame.mixer.Channel(2).play(BSound_hurt)
@@ -112,7 +117,7 @@ class boss(object):
             self.skill1()
             self.s1_Cd = 150
             
-        if self.s2_Cd == 0:
+        if self.s2_Cd == 0 and self.HP < 50:
             self.skill2()
             self.s2_Cd = 50
         
@@ -132,12 +137,13 @@ class boss(object):
         self.s1_Cd = 10
         
     def skill2(self):
+        x = random.randrange(-100, 100)
         if self.facing == 1: 
-            self.Attacks.append(ske_hand(0, 200, 1, self.target))
-            self.Attacks.append(ske_hand(100, 450, 1, self.target))
-            self.Attacks.append(ske_hand(200, 700, 1, self.target))
+            self.Attacks.append(ske_hand(0, 200 + x, 1, self.target))
+            self.Attacks.append(ske_hand(100, 450 + x, 1, self.target))
+            self.Attacks.append(ske_hand(0, 700 + x, 1, self.target))
         else: 
-            self.Attacks.append(ske_hand(1500, 200, -1, self.target))
-            self.Attacks.append(ske_hand(1400, 450, -1, self.target))
-            self.Attacks.append(ske_hand(1300, 700, -1, self.target))
+            self.Attacks.append(ske_hand(1500, 200 + x, -1, self.target))
+            self.Attacks.append(ske_hand(1400, 450 + x, -1, self.target))
+            self.Attacks.append(ske_hand(1300, 700 + x, -1, self.target))
         

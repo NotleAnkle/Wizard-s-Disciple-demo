@@ -1,4 +1,3 @@
-from pickle import TRUE
 import pygame, sys
 from pygame.locals import *
 from Projectile import *
@@ -30,7 +29,7 @@ class skull(object):
        else: self.y -= min(self.speed, abs(self.y - self.target.y + 10))
        screen.blit(SkuImg, (self.x, self.y))
        self.hitBox = pygame.Rect(self.x, self.y, self.width, self.height)
-       pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
+       if ColiderBoxOn: pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
 
     def hit(self):
         if self.hitBox.colliderect(self.target.hitBox): return True
@@ -41,13 +40,14 @@ class ske_hand(object):
         self.x = x
         self.y = y
         self.facing = facing
+        self.speed = 8
         self.rotate = 0
         self.hitBox = pygame.Rect(self.x, self.y, 34, 120)
         self.target = target
         self.dame = 3
         
     def draw(self, screen):
-        self.x += 10*self.facing
+        self.x += 8*self.facing
         self.rotate += 90
         if(self.rotate >= 360): self.rotate = 0
         if self.rotate == 0:
@@ -63,7 +63,7 @@ class ske_hand(object):
             screen.blit((pygame.transform.rotate(SkehandImg, 90)), (self.x - 30, self.y - 7))
             self.hitBox = pygame.Rect(self.x - 30, self.y - 7, 120, 34)
         
-        pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
+        if ColiderBoxOn: pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)
     def hit(self):
         if self.hitBox.colliderect(self.target.hitBox): return True
         return False

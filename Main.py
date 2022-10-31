@@ -50,7 +50,7 @@ while running:
                     if At.hit(Atb, 64, 64):
                         Boss.Attacks.remove(Atb)
                         Wiz.Attacks.remove(At)
-                        if Wiz.MP < 100: Wiz.MP += 3
+                        if Wiz.MP <= 97: Wiz.MP += 3
         
         Boss.Attack(Wiz)
         Boss.draw(screen)
@@ -58,10 +58,12 @@ while running:
             if Atb.hit():
                 Wiz.getHit(Atb.dame)
                 Boss.Attacks.remove(Atb)
-    elif Wiz.HP <= 0:
-        screen.blit(lose, (0,0))
-    elif Boss.HP <= 0:
-        screen.blit(win, (0,0))  
+    else:
+        pygame.mixer.music.stop()
+        if Wiz.HP <= 0:
+            screen.blit(lose, (0,0))
+        if Boss.HP <= 0:
+            screen.blit(win, (0,0))  
     
     pygame.draw.rect(screen, (0,0,0), (0,0,1540,800), 1)
  

@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from Projectile import *
+
 pygame.mixer.init()
 
 clone = pygame.image.load("Img\Clone.png")
@@ -47,7 +48,7 @@ class player(object):
         self.y = y
         self.width = width
         self.height = height
-        self.speed = 7
+        self.speed = 8
         self.isJump = False
         self.walk = False
         self.direction = "left"
@@ -199,7 +200,7 @@ class player(object):
             self.GetHit -= 1
         
         self.hitBox = pygame.Rect(self.x + 5, self.y, width - 10, height)
-        pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
+        if ColiderBoxOn: pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
          
         #Bolt
         for Bolt in self.Attacks:
