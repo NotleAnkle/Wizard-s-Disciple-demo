@@ -54,9 +54,7 @@ class boss(object):
         if self.s1_Cd > 0: self.s1_Cd -= 1
         if self.s2_Cd > 0: self.s2_Cd -= 1
         
-        #HP
-        pygame.draw.rect(screen, (10,10,10), (1480, 200, 50, 100*5 + 4))
-        pygame.draw.rect(screen, (200,200,200), (1480 + 2, 200 + 2 + (100 -self.HP)*5, 50 - 4, self.HP*5))
+        
         
         if not(self.Acskill):
             #Idle
@@ -95,6 +93,11 @@ class boss(object):
         
         ScreenLimit(self)
         screen.blit(Boss_shadow, (self.sha_x, self.sha_y))
+        
+        #HP
+        pygame.draw.rect(screen, (10,10,10), (1480, 200, 50, 100*5 + 4))
+        pygame.draw.rect(screen, (200,200,200), (1480 + 2, 200 + 2 + (100 -self.HP)*5, 50 - 4, self.HP*5))
+        
         #ColiderBox
         self.hitBox = pygame.Rect(self.x + 10, self.y, 230, 250)
         if ColiderBoxOn : pygame.draw.rect(screen, (255, 0, 0), self.hitBox, 2)

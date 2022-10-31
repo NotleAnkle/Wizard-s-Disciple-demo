@@ -27,37 +27,50 @@ y = 400
 width = 64
 height = 92
 Wiz = player(x, y, width, height)
-Boss = boss(1000, 200, Wiz)
+Boss = boss(1300, 200, Wiz)
 running = True
 pygame.mixer.music.play(-1)
+
+my_font = pygame.font.SysFont('Comic Sans MS', 200)
+text_surface = my_font.render('READY?', False, (0, 0, 0))
+
+pre_time = 60
 
 while running:
     screen.blit(background, (0, 0))
     
     if Wiz.HP > 0 and Boss.HP > 0:
-        
-        if Wiz.Cooldown > 0: Wiz.Cooldown -= 1 
-        if Boss.hit(): Wiz.getHit(10)
-        Wiz.move()
-        #Wiz.Attack()
-        Wiz.draw(screen)
-        for At in Wiz.Attacks:
-            if At.hit(Boss, 230, 250):
-                Boss.getHit(At.dame)
-                Wiz.Attacks.remove(At)
-            else:
-                for Atb in Boss.Attacks:
-                    if At.hit(Atb, 64, 64):
-                        Boss.Attacks.remove(Atb)
-                        Wiz.Attacks.remove(At)
-                        if Wiz.MP <= 97: Wiz.MP += 3
-        
-        Boss.Attack(Wiz)
-        Boss.draw(screen)
-        for Atb in Boss.Attacks:
-            if Atb.hit():
-                Wiz.getHit(Atb.dame)
-                Boss.Attacks.remove(Atb)
+        if pre_time == 0:
+            if Wiz.Cooldown > 0: Wiz.Cooldown -= 1 
+            if Boss.hit(): Wiz.getHit(10)
+            Wiz.move()
+            #Wiz.Attack()
+            Wiz.draw(screen)
+            for At in Wiz.Attacks:
+                if At.hit(Boss, 230, 250):
+                    Boss.getHit(At.dame)
+                    Wiz.Attacks.remove(At)
+                else:
+                    for Atb in Boss.Attacks:
+                        if At.hit(Atb, 64, 64):
+                            Boss.Attacks.remove(Atb)
+                            Wiz.Attacks.remove(At)
+                            if Wiz.MP <= 97: Wiz.MP += 3
+            
+            Boss.Attack(Wiz)
+            Boss.draw(screen)
+            for Atb in Boss.Attacks:
+                if Atb.hit():
+                    Wiz.getHit(Atb.dame)
+                    Boss.Attacks.remove(Atb)
+        else:
+            Wiz.draw(screen)
+            Boss.draw(screen)
+            if pre_time > 30: 
+                screen.blit(text_surface, (400,250))
+            else:  
+                screen.blit(my_font.render('FIGHT!', False, (0, 0, 0)), (400,250))
+            pre_time -= 1
     else:
         pygame.mixer.music.stop()
         if Wiz.HP <= 0:
