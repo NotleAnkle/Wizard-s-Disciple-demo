@@ -17,7 +17,8 @@ class Menu():
         self.offset = - 100
 
     def draw_cursor(self):
-        self.game.draw_text('*', 30, self.cursor_rect.x - 10, self.cursor_rect.y)
+        #self.game.draw_text('*', 30, self.cursor_rect.x - 10, self.cursor_rect.y)
+        pygame.draw.rect(self.game.display, (0,0,0), (self.cursor_rect.x, self.cursor_rect.y - 20, 220, 40), 2)
 
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
@@ -128,5 +129,5 @@ class CreditsMenu(Menu):
                 self.run_display = False
             self.game.display.blit(background,(0,0))
             self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text('Made by me', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
+            self.game.draw_text('Made by \n Zunnochym \n AnkDapTrai', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
             self.blit_screen()

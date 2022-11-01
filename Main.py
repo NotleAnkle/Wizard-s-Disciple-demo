@@ -22,10 +22,7 @@ win = pygame.transform.scale(pygame.image.load("Img\Win.png"), (1540, 800))
 music = pygame.mixer.music.load("Sound\BG.wav")
 pygame.mixer.music.set_volume(1.1)
 
-x = 0
-y = 400
-width = 64
-height = 92
+
 Wiz = player(x, y, width, height)
 Boss = boss(1300, 200, Wiz)
 running = True

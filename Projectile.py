@@ -10,7 +10,7 @@ def drawBar(screen):
     pygame.draw.rect(screen, (255,255,255), (0, 25, 100 * 2 , 20))
 def ScreenLimit(target):
     if target.x + target.width > 1540:
-        target.x = 1540 - target.height
+        target.x = 1540 - target.width
     if target.x < 0:
         target.x = 0
     if target.y + target.height > 800:
