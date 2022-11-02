@@ -14,6 +14,7 @@ class Game():
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.main_menu = MainMenu(self)
         self.options = OptionsMenu(self)
+        self.tutorial = TutorialMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
 

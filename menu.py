@@ -1,8 +1,6 @@
 import pygame
 
 background = pygame.image.load(r'imgMenu\Background.png')
-
-
         
 def run(runfile):
   with open(runfile,"r") as rnf:
@@ -31,7 +29,8 @@ class MainMenu(Menu):
         self.state = "Start"
         self.startx, self.starty = self.mid_w, self.mid_h + 40
         self.optionsx, self.optionsy = self.mid_w, self.mid_h + 80
-        self.creditsx, self.creditsy = self.mid_w, self.mid_h + 120
+        self.tutorialx, self.tutorialy = self.mid_w, self.mid_h + 120
+        self.creditsx, self.creditsy = self.mid_w, self.mid_h + 160
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
 
     def display_menu(self):
@@ -43,6 +42,7 @@ class MainMenu(Menu):
             self.game.draw_text('Main Menu', 40, self.game.DISPLAY_W / 2 + 200, self.game.DISPLAY_H / 2 - 20 - 200)
             self.game.draw_text("Start Game", 40, self.startx, self.starty)
             self.game.draw_text("Options", 40, self.optionsx, self.optionsy)
+            self.game.draw_text("Tutorial", 40, self.tutorialx, self.tutorialy)            
             self.game.draw_text("Credits", 40, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
@@ -53,6 +53,9 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
                 self.state = 'Options'
             elif self.state == 'Options':
+                self.cursor_rect.midtop = (self.tutorialx + self.offset, self.tutorialy)
+                self.state = 'Tutorial'
+            elif self.state == 'Tutorial':
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = 'Credits'
             elif self.state == 'Credits':
@@ -66,6 +69,9 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = 'Start'
             elif self.state == 'Credits':
+                self.cursor_rect.midtop = (self.tutorialx + self.offset, self.tutorialy)
+                self.state = 'Tutorial'
+            elif self.state == 'Tutorial':
                 self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
                 self.state = 'Options'
 
@@ -77,6 +83,8 @@ class MainMenu(Menu):
                 run("Main.py")
             elif self.state == 'Options':
                 self.game.curr_menu = self.game.options
+            elif self.state == 'Tutorial':
+                self.game.curr_menu = self.game.tutorial
             elif self.state == 'Credits':
                 self.game.curr_menu = self.game.credits
             self.run_display = False
@@ -128,6 +136,20 @@ class CreditsMenu(Menu):
                 self.game.curr_menu = self.game.main_menu
                 self.run_display = False
             self.game.display.blit(background,(0,0))
-            self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text('Made by \n Zunnochym \n AnkDapTrai', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
+            self.game.draw_text('Credits', 50, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 110)
+            self.game.draw_text('Made by Zunzun & AnkDapDa', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
+            self.blit_screen()
+
+class TutorialMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            if self.game.START_KEY or self.game.BACK_KEY:
+                self.game.curr_menu = self.game.main_menu
+                self.run_display = False
+            self.game.display.blit(pygame.image.load(r"imgMenu\Tutorial.png"),(0,0))
             self.blit_screen()
