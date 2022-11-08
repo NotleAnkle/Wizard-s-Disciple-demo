@@ -20,7 +20,7 @@ lose = pygame.transform.scale(lose, (1540, 800))
 win = pygame.transform.scale(pygame.image.load("Img\Win.png"), (1540, 800))
 
 music = pygame.mixer.music.load("Sound\BG.wav")
-pygame.mixer.music.set_volume(1.1)
+pygame.mixer.music.set_volume(1)
 
 
 Wiz = player(x, y, width, height)
@@ -32,6 +32,7 @@ my_font = pygame.font.SysFont('Comic Sans MS', 200)
 text_surface = my_font.render('READY?', False, (0, 0, 0))
 
 pre_time = 60
+help = True
 
 while running:
     screen.blit(background, (0, 0))
@@ -50,16 +51,21 @@ while running:
                 else:
                     for Atb in Boss.Attacks:
                         if At.hit(Atb, 64, 64):
+                            Wiz.createManaOrb(Atb.x, Atb.y)
                             Boss.Attacks.remove(Atb)
                             Wiz.Attacks.remove(At)
-                            if Wiz.MP <= 97: Wiz.MP += 3
-            
+                            
+            if Boss.HP == 50 and help == True:
+                Wiz.createHpOrb(Boss.x, Boss.y)
+                help = False
             Boss.Attack(Wiz)
             Boss.draw(screen)
             for Atb in Boss.Attacks:
                 if Atb.hit():
                     Wiz.getHit(Atb.dame)
                     Boss.Attacks.remove(Atb)
+                    
+
         else:
             Wiz.draw(screen)
             Boss.draw(screen)

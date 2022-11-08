@@ -132,7 +132,7 @@ class CreditsMenu(Menu):
                 self.run_display = False
             self.game.display.blit(background,(0,0))
             self.game.draw_text('Credits', 50, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 110)
-            self.game.draw_text('Made by Zunzun & AnkDepTrym', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
+            self.game.draw_text('Made by Dung & Anh', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
             self.blit_screen()
 
 class TutorialMenu(Menu):

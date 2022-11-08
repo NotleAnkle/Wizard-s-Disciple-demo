@@ -118,7 +118,7 @@ class boss(object):
                 
         if self.s1_Cd == 0:
             self.skill1()
-            self.s1_Cd = 150
+            self.s1_Cd = 120
             
         if self.s2_Cd == 0 and self.HP < 50:
             self.skill2()

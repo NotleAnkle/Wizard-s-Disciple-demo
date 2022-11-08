@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 
-ColiderBoxOn = False
+ColiderBoxOn = True
 ShieldImg = pygame.image.load("Img\shield.png")
 def drawBar(screen):
     pygame.draw.rect(screen, (0,0,0), (0, 2, 100 * 2 + 2, 22))
@@ -37,7 +37,39 @@ class projectile(object):
     def hit(self, enemy, width, height):
         if self.x >= enemy.x and self.y >= enemy.y and self.x <= enemy.x + width and self.y <= enemy.y + height : return True
         return False
+
+class mana_orb(object):
+    def __init__(self, x , y, target):
+        self.x = x
+        self.y = y
+        self.target = target
+        self.tag = "MP"
+        self.hitBox = pygame.Rect(self.x, self.y, 2, 2)
+    def draw(self, screen):
         
+        if ColiderBoxOn: pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
+        pygame.draw.circle(screen, (200,200,200), (self.x, self.y), 5)
+        pygame.draw.circle(screen, (0,0,0), (self.x, self.y), 5,1)    
+    def hit(self):
+        if self.hitBox.colliderect(self.target.hitBox): return True
+        return False 
+
+class hp_orb(object):
+    def __init__(self, x , y, target):
+        self.x = x
+        self.y = y
+        self.target = target
+        self.tag = "HP"
+        self.hitBox = pygame.Rect(self.x, self.y, 2, 2)
+    def draw(self, screen):
+        
+        if ColiderBoxOn: pygame.draw.rect(screen, (255,0,0), self.hitBox, 4)
+        pygame.draw.circle(screen, (50,50,50), (self.x, self.y), 10)
+        pygame.draw.circle(screen, (0,0,0), (self.x, self.y), 10,2)    
+    def hit(self):
+        if self.hitBox.colliderect(self.target.hitBox): return True
+        return False   
+          
 class shield(object):
     def __init__(self, x, y, direction):
         self.x = x

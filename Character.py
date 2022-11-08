@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from Projectile import *
+import random
 
 pygame.mixer.init()
 
@@ -57,6 +58,7 @@ class player(object):
         self.idleCount = 0
         self.jumpCount = 8
         self.Attacks = []
+        self.Recover = []
         self.Cooldown = 0
         self.isAt = False
         self.AtCount = 0
@@ -217,6 +219,13 @@ class player(object):
                 self.Attacks.pop(self.Attacks.index(Bolt))
         for Bolt in self.Attacks:
             Bolt.draw(screen)
+        #Orb
+        for orb in self.Recover:
+            orb.draw(screen)
+            if orb.hit(): 
+                if self.MP < 100 and orb.tag == "MP":self.MP += 1
+                if orb.tag == "HP" and self.HP < 100: self.HP += 2
+                self.Recover.remove(orb)
         
         ScreenLimit(self)
         self.clone_x = self.x
@@ -237,3 +246,11 @@ class player(object):
         if self.dashCooldown == 0:
             self.dashCooldown = 28
             self.dashDirection = self.direction
+            
+    def createManaOrb(self, x, y):
+        self.Recover.append(mana_orb(x + random.randrange(-10, 10) - 10, y + 64 + random.randrange(-5, 5),self))
+        self.Recover.append(mana_orb(x + random.randrange(-10, 10) + 10, y + 64 + random.randrange(-5, 5),self))
+        self.Recover.append(mana_orb(x + random.randrange(-10, 10) + 5, y + 64 + random.randrange(-5, 5) + 5, self))
+    
+    def createHpOrb(self, x, y):
+        self.Recover.append(hp_orb(x + 125, y + 250, self))
