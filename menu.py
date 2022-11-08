@@ -40,10 +40,10 @@ class MainMenu(Menu):
             self.check_input()
             self.game.display.blit(background,(0,0))
             self.game.draw_text('Main Menu', 40, self.game.DISPLAY_W / 2 + 200, self.game.DISPLAY_H / 2 - 20 - 200)
-            self.game.draw_text("Start Game", 40, self.startx, self.starty)
-            self.game.draw_text("Options", 40, self.optionsx, self.optionsy)
-            self.game.draw_text("Tutorial", 40, self.tutorialx, self.tutorialy)            
-            self.game.draw_text("Credits", 40, self.creditsx, self.creditsy)
+            self.game.draw_text("Start Game", 30, self.startx, self.starty)
+            self.game.draw_text("Options", 30, self.optionsx, self.optionsy)
+            self.game.draw_text("Tutorial", 30, self.tutorialx, self.tutorialy)            
+            self.game.draw_text("Credits", 30, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -93,36 +93,31 @@ class OptionsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'Volume'
-        self.volx, self.voly = self.mid_w, self.mid_h + 20
-        self.controlsx, self.controlsy = self.mid_w, self.mid_h + 40
+        self.volx, self.voly = self.game.DISPLAY_W/2-20, self.game.DISPLAY_H/2-40
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
 
     def display_menu(self):
         self.run_display = True
+        self.volume = 1;
         while self.run_display:
             self.game.check_events()
             self.check_input()
             self.game.display.blit(background,(0,0))
-            self.game.draw_text('Options', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 30)
-            self.game.draw_text("Volume", 15, self.volx, self.voly)
-            self.game.draw_text("Controls", 15, self.controlsx, self.controlsy)
-            self.draw_cursor()
+            self.game.draw_text('Options', 40, self.game.DISPLAY_W/2-20, self.game.DISPLAY_H/2 - 90)
+            self.game.draw_text("Volume", 25, self.volx, self.voly)
+            pygame.draw.rect(self.game.display,(0,0,0),(self.cursor_rect.x-135, self.cursor_rect.y+30,500,30),2)
+            pygame.draw.rect(self.game.display,(100,100,100),(self.cursor_rect.x-135+2, self.cursor_rect.y+30+2,500*self.volume-4,30-4))
             self.blit_screen()
 
     def check_input(self):
         if self.game.BACK_KEY:
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
-        elif self.game.UP_KEY or self.game.DOWN_KEY:
-            if self.state == 'Volume':
-                self.state = 'Controls'
-                self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
-            elif self.state == 'Controls':
-                self.state = 'Volume'
-                self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
         elif self.game.START_KEY:
-            # TO-DO: Create a Volume Menu and a Controls Menu
             pass
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and self.volume <= 0.9: self.volume += 0.1
+        if keys[pygame.K_LEFT] and self.volume >= 0.1: self.volume -= 0.1 
 
 class CreditsMenu(Menu):
     def __init__(self, game):
@@ -137,7 +132,7 @@ class CreditsMenu(Menu):
                 self.run_display = False
             self.game.display.blit(background,(0,0))
             self.game.draw_text('Credits', 50, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 110)
-            self.game.draw_text('Made by Zunzun & AnkDapDa', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
+            self.game.draw_text('Made by Zunzun & AnkDepTrym', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 40)
             self.blit_screen()
 
 class TutorialMenu(Menu):
