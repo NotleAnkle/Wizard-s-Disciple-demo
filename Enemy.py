@@ -1,4 +1,5 @@
 import pygame, sys
+import math
 from pygame.locals import *
 from Projectile import *
 
@@ -19,7 +20,6 @@ class skull(object):
         self.target = target
         self.speed = 5
         self.hitBox = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.walkCount = 0
         self.dame = 5
         pygame.mixer.Channel(4).play(SkuSound)
     def draw(self,screen):
@@ -35,6 +35,37 @@ class skull(object):
         if self.hitBox.colliderect(self.target.hitBox): return True
         return False
 
+class floating_skull(object):
+    def __init__(self, target, player, number):
+        self.x = target.x
+        self.y = target.y
+        self.width = 64
+        self.height = 64
+        self.radius = 160
+        self.target = target
+        self.player = player
+        self.number = number
+        self.hitBox = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.alpha = 0
+        self.dame = 5
+        pygame.mixer.Channel(4).play(SkuSound)
+    def draw(self,screen):
+        self.alpha += 0.1
+        if self.alpha == 360: self.alpha = 0
+        
+        self.x = self.target.x+90 - self.radius*math.cos(self.alpha+ self.number*80)
+        self.y = self.target.y+95 - self.radius*math.sin(self.alpha + self.number*80)
+       
+        screen.blit(SkuImg, (self.x, self.y))
+        
+        ScreenLimit(self)
+        self.hitBox = pygame.Rect(self.x, self.y, self.width, self.height)
+        if ColiderBoxOn: pygame.draw.rect(screen, (255,0,0), self.hitBox, 2)
+
+    def hit(self):
+        if self.hitBox.colliderect(self.player.hitBox): return True
+        return False
+    
 class ske_hand(object):
     def __init__(self, x, y, facing, target):
         self.x = x

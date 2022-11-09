@@ -47,6 +47,8 @@ class boss(object):
         self.s1_Cd = 0
         #Skill 2
         self.s2_Cd = 0
+        #skill 3
+        self.s3_cd = 0
 
     def draw(self,screen):
         #Cooldown
@@ -112,15 +114,12 @@ class boss(object):
         return False
     
     def Attack(self, Player):
-        for Bolt in self.Attacks:
-            if not(Bolt.x < 1500 and Bolt.x > 0 and Bolt.y > 150 and Bolt.y < 800):
-                self.Attacks.pop(self.Attacks.index(Bolt))
                 
         if self.s1_Cd == 0:
             self.skill1()
             self.s1_Cd = 120
             
-        if self.s2_Cd == 0 and self.HP < 50:
+        if self.s2_Cd == 0 and self.HP < 30:
             self.skill2()
             self.s2_Cd = 50
         
@@ -128,6 +127,10 @@ class boss(object):
             #self.skill1()
             self.Attacks.append(skull(self.x, self.y, 64, 64,Player))
             self.Cooldown = 100
+            
+        if self.s3_cd == 0 and self.HP < 60:
+            self.skill3()
+            self.s3_cd = 150
     
     def skill1(self):
         
@@ -149,4 +152,9 @@ class boss(object):
             self.Attacks.append(ske_hand(1500, 200 + x, -1, self.target))
             self.Attacks.append(ske_hand(1400, 450 + x, -1, self.target))
             self.Attacks.append(ske_hand(1300, 700 + x, -1, self.target))
-        
+    
+    def skill3(self):
+        self.Attacks.append(floating_skull(self, self.target, 0))
+        self.Attacks.append(floating_skull(self, self.target, 1))
+        self.Attacks.append(floating_skull(self, self.target, 2))
+        self.Attacks.append(floating_skull(self, self.target, 3))

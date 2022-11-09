@@ -10,7 +10,7 @@ pygame.mixer.init()
 
 FPS = 30 # frames per second setting
 fpsClock = pygame.time.Clock()
-screen = pygame.display.set_mode((1540, 800), 0, 32)
+screen = pygame.display.set_mode((1540, 800),0, 32)
 pygame.display.set_caption("Wizard's disciple") 
 background = pygame.image.load("Img\Background.png")
 icon = pygame.image.load("Img\Icon.png")
@@ -34,6 +34,10 @@ text_surface = my_font.render('READY?', False, (0, 0, 0))
 pre_time = 60
 help = True
 
+#Boss.Attacks.append(floating_skull(Boss, Wiz, 0))
+#Boss.Attacks.append(floating_skull(Boss, Wiz, 1))
+#Boss.Attacks.append(floating_skull(Boss, Wiz, 2))
+#Boss.Attacks.append(floating_skull(Boss, Wiz, 3))
 while running:
     screen.blit(background, (0, 0))
     
@@ -64,7 +68,7 @@ while running:
                 if Atb.hit():
                     Wiz.getHit(Atb.dame)
                     Boss.Attacks.remove(Atb)
-                    
+                
 
         else:
             Wiz.draw(screen)
