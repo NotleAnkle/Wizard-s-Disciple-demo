@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 
-ColiderBoxOn = True
+ColiderBoxOn = False
 ShieldImg = pygame.image.load("Img\shield.png")
 def drawBar(screen):
     pygame.draw.rect(screen, (0,0,0), (0, 2, 100 * 2 + 2, 22))

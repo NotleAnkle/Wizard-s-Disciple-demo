@@ -55,7 +55,7 @@ class boss(object):
         if self.Cooldown > 0: self.Cooldown -= 1
         if self.s1_Cd > 0: self.s1_Cd -= 1
         if self.s2_Cd > 0: self.s2_Cd -= 1
-        
+        if self.s3_cd > 0: self.s3_cd -= 1
         
         
         if not(self.Acskill):
@@ -154,6 +154,7 @@ class boss(object):
             self.Attacks.append(ske_hand(1300, 700 + x, -1, self.target))
     
     def skill3(self):
+        self.Attacks.clear()
         self.Attacks.append(floating_skull(self, self.target, 0))
         self.Attacks.append(floating_skull(self, self.target, 1))
         self.Attacks.append(floating_skull(self, self.target, 2))
