@@ -103,8 +103,8 @@ while running:
     pygame.draw.rect(screen, (0,0,0), (0,0,1540,800), 1)
  
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN and pygame.K_ESCAPE:
-                pause()
+        #if event.type == pygame.KEYDOWN and pygame.K_ESCAPE:
+        #        pause()
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
